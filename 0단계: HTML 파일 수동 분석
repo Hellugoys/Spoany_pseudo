@@ -1,0 +1,19 @@
+import csv
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+with open("branch_traffic.html", "r", encoding="utf-8") as f:
+    html = f.read()
+
+soup = BeautifulSoup(html, "html.parser")
+
+people_text = soup.select_one(".dash_chart_point").text
+people = int(people_text.replace("명", "").strip())
+
+print("현재 인원:", people)
+
+now = datetime.now()
+
+with open("gym_people.csv", "a", newline="", encoding="utf-8-sig") as f:
+    writer = csv.writer(f)
+    writer.writerow([now, people])
